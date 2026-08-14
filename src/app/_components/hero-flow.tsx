@@ -125,9 +125,8 @@ export function HeroFlow({ nav }: { nav: React.ReactNode }) {
       const W = side.host.clientWidth * 2; // full band width
       const H = side.host.clientHeight;
       const dir = name === "left" ? -1 : 1;
-      const sizeFactor = W < 640 ? 0.62 : 1;
       const geometry = (p: number) => {
-        const scale = ((heightSvh(p) / 100) * H * sizeFactor) / BASE_H;
+        const scale = ((heightSvh(p) / 100) * H) / BASE_H;
         const angle = angleDeg(p);
         const projectedW =
           BASE_H * scale * ASPECT * Math.cos((angle * Math.PI) / 180);
@@ -235,8 +234,14 @@ export function HeroFlow({ nav }: { nav: React.ReactNode }) {
   return (
     <section className="relative h-svh overflow-hidden">
       {/* The card band: one clipping container per side, so cards can
-          emerge from behind the centre seam without crossing it. */}
-      <div aria-hidden className="absolute inset-0">
+          emerge from behind the centre seam without crossing it. Card sizes
+          derive from this container's height, so on phones it becomes a
+          fixed strip in the free zone between the headline and the copy
+          below, keeping the band clear of both. */}
+      <div
+        aria-hidden
+        className="absolute inset-x-0 top-0 bottom-0 max-sm:top-[24svh] max-sm:bottom-auto max-sm:h-[32svh]"
+      >
         <div
           ref={leftRef}
           className="absolute inset-y-0 left-0 right-1/2 overflow-hidden"

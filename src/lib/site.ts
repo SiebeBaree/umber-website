@@ -2,12 +2,9 @@
  * The single source of truth for the site's public identity. Every canonical
  * URL, sitemap entry, robots rule, Open Graph tag and llms.txt line derives
  * from these constants.
- *
- * SITE_URL is a placeholder until the production domain is registered
- * (mirrors the app id com.umber.app). Change it here or set
- * NEXT_PUBLIC_SITE_URL and everything follows.
  */
-export const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://umber.app";
+export const SITE_URL =
+  process.env.NEXT_PUBLIC_SITE_URL ?? "https://umber.s4.nu";
 
 export const SITE_NAME = "Umber";
 
