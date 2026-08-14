@@ -1,26 +1,382 @@
 @import "tailwindcss";
 
+/*
+ * The palette and surface language are copied from the Umber app's stylesheet
+ * (packages/ui/src/styles.css) so the site and the app cannot drift visually.
+ */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  color-scheme: light;
+
+  --umber-canvas: #cbdaf2;
+  --umber-surface: #ffffff;
+  --umber-line: #dde4f0;
+  --umber-ink: #1c2333;
+  --umber-muted: #5f6b83;
+  --umber-accent: #3164e4;
+  --umber-accent-strong: #2450c4;
+  --umber-accent-ink: #f6f9ff;
+
+  --umber-glass: rgb(255 255 255 / 0.52);
+  --umber-glass-strong: rgb(255 255 255 / 0.72);
+  --umber-glass-hover: rgb(255 255 255 / 0.92);
+  --umber-glass-edge: rgb(255 255 255 / 0.65);
+  --umber-glass-edge-strong: rgb(255 255 255 / 0.95);
+  --umber-glass-shadow: rgb(28 41 90 / 0.1);
+
+  --umber-hover-tint: rgb(28 35 51 / 0.06);
+  --umber-control-transition:
+    background-color 200ms ease-out, border-color 200ms ease-out,
+    color 200ms ease-out, box-shadow 200ms ease-out, transform 150ms ease-out;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
+  --color-canvas: var(--umber-canvas);
+  --color-surface: var(--umber-surface);
+  --color-line: var(--umber-line);
+  --color-ink: var(--umber-ink);
+  --color-muted: var(--umber-muted);
+  --color-accent: var(--umber-accent);
+  --color-accent-strong: var(--umber-accent-strong);
+  --color-accent-ink: var(--umber-accent-ink);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  --font-display: var(--font-instrument-serif);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@utility glass {
+  border: 1px solid var(--umber-glass-edge);
+  background-color: var(--umber-glass);
+  backdrop-filter: blur(24px) saturate(170%);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.85),
+    0 12px 32px -16px var(--umber-glass-shadow),
+    0 2px 8px -4px var(--umber-glass-shadow);
+}
+
+@utility glass-raised {
+  border: 1px solid var(--umber-glass-edge);
+  background-color: var(--umber-glass-strong);
+  backdrop-filter: blur(24px) saturate(170%);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.9),
+    0 16px 40px -20px var(--umber-glass-shadow),
+    0 2px 10px -6px var(--umber-glass-shadow);
+}
+
+@utility glass-control {
+  border: 1px solid var(--umber-glass-edge);
+  background-color: var(--umber-glass-strong);
+  backdrop-filter: blur(24px) saturate(170%);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.9),
+    0 16px 40px -20px var(--umber-glass-shadow),
+    0 2px 10px -6px var(--umber-glass-shadow);
+  transition: var(--umber-control-transition);
+
+  &:hover {
+    border-color: var(--umber-glass-edge-strong);
+    background-color: var(--umber-glass-hover);
+    box-shadow:
+      inset 0 1px 0 rgb(255 255 255 / 1),
+      0 18px 44px -20px var(--umber-glass-shadow),
+      0 4px 14px -6px var(--umber-glass-shadow);
   }
 }
 
+@utility tint-control {
+  transition: var(--umber-control-transition);
+
+  &:hover {
+    background-color: var(--umber-hover-tint);
+  }
+}
+
+/* The segmented control's squash-and-stretch settle, from the app. */
+@keyframes umber-segment-settle {
+  0% {
+    transform: scaleX(1.24) scaleY(0.82);
+  }
+
+  45% {
+    transform: scaleX(0.95) scaleY(1.06);
+  }
+
+  75% {
+    transform: scaleX(1.02) scaleY(0.98);
+  }
+
+  100% {
+    transform: scaleX(1) scaleY(1);
+  }
+}
+
+@utility segment-settle {
+  animation: umber-segment-settle 480ms cubic-bezier(0.32, 0.72, 0.35, 1);
+}
+
+/* The living canvas blob paths, copied from the app. */
+@keyframes umber-drift-a {
+  0%,
+  100% {
+    transform: translate3d(-8%, 0, 0) scale(1);
+  }
+
+  30% {
+    transform: translate3d(14%, -7%, 0) scale(1.12);
+  }
+
+  55% {
+    transform: translate3d(30%, 5%, 0) scale(0.94);
+  }
+
+  80% {
+    transform: translate3d(10%, 9%, 0) scale(1.06);
+  }
+}
+
+@keyframes umber-drift-b {
+  0%,
+  100% {
+    transform: translate3d(6%, 4%, 0) scale(1.04);
+  }
+
+  35% {
+    transform: translate3d(-12%, -6%, 0) scale(0.92);
+  }
+
+  60% {
+    transform: translate3d(-26%, 6%, 0) scale(1.14);
+  }
+
+  85% {
+    transform: translate3d(-5%, 11%, 0) scale(0.98);
+  }
+}
+
+@keyframes umber-drift-c {
+  0%,
+  100% {
+    transform: translate3d(0, -3%, 0) scale(0.96);
+  }
+
+  25% {
+    transform: translate3d(18%, 8%, 0) scale(1.1);
+  }
+
+  50% {
+    transform: translate3d(6%, 16%, 0) scale(0.9);
+  }
+
+  75% {
+    transform: translate3d(-14%, 5%, 0) scale(1.08);
+  }
+}
+
+@utility drift-a {
+  animation: umber-drift-a 47s ease-in-out infinite;
+}
+
+@utility drift-b {
+  animation: umber-drift-b 61s ease-in-out infinite;
+}
+
+@utility drift-c {
+  animation: umber-drift-c 73s ease-in-out infinite;
+}
+
+/* Film grain, generated inline by an SVG turbulence filter. From the app. */
+@utility film-grain {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 0.35 0 0 0 0 0.38 0 0 0 0 0.48 0 0 0 0.55 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E");
+}
+
+/* A hero tile being born: tiny in the middle, snapping up to size. */
+@keyframes hero-tile-in {
+  from {
+    opacity: 0;
+    scale: 0.2;
+  }
+
+  to {
+    opacity: 1;
+    scale: 1;
+  }
+}
+
+@utility hero-tile-in {
+  animation: hero-tile-in 550ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* A model tile rising into the grid when the modality switches. */
+@keyframes tile-rise {
+  from {
+    opacity: 0;
+    transform: translateY(14px) scale(0.97);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@utility tile-rise {
+  animation: tile-rise 480ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* --- The model constellation ------------------------------------------ */
+
+/* A packet of data gliding along its wire's exact curve. */
+@keyframes packet-run {
+  from {
+    offset-distance: 0%;
+  }
+
+  to {
+    offset-distance: 100%;
+  }
+}
+
+@utility packet-run {
+  offset-rotate: 0deg;
+  animation: packet-run 950ms cubic-bezier(0.45, 0.05, 0.35, 1) both;
+}
+
+/* The providers breathing gently in place, staggered per node. */
+@keyframes node-bob {
+  0%,
+  100% {
+    transform: translateY(-2.5%);
+  }
+
+  50% {
+    transform: translateY(2.5%);
+  }
+}
+
+@utility node-bob {
+  animation: node-bob 5.5s ease-in-out infinite;
+}
+
+/* The loading arc orbiting the Umber mark. */
+@keyframes spinner-turn {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@utility spinner-turn {
+  animation: spinner-turn 900ms linear infinite;
+  transform-origin: center;
+}
+
+/* The result developing from a blur, like a print in a tray. */
+@keyframes art-reveal {
+  0% {
+    opacity: 0;
+    transform: scale(1.06);
+    filter: blur(26px) saturate(1.5);
+  }
+
+  35% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 1;
+    transform: scale(1);
+    filter: blur(0) saturate(1);
+  }
+}
+
+@utility art-reveal {
+  animation: art-reveal 1500ms cubic-bezier(0.32, 0.72, 0.35, 1) both;
+}
+
+/* And dissolving back out the way it came: softening, then gone. */
+@keyframes art-dissolve {
+  from {
+    opacity: 1;
+    transform: scale(1);
+    filter: blur(0);
+  }
+
+  to {
+    opacity: 0;
+    transform: scale(1.04);
+    filter: blur(20px);
+  }
+}
+
+@utility art-dissolve {
+  animation: art-dissolve 1350ms cubic-bezier(0.45, 0.05, 0.55, 0.95) both;
+}
+
+/* The empty canvas breathing softly while it waits for an image. */
+@keyframes canvas-wait {
+  0%,
+  100% {
+    opacity: 0.2;
+  }
+
+  50% {
+    opacity: 0.5;
+  }
+}
+
+@utility canvas-wait {
+  animation: canvas-wait 3s ease-in-out infinite;
+}
+
+/* The full-catalogue lanes under the constellation. */
+@keyframes marquee-left {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes marquee-right {
+  from {
+    transform: translateX(-50%);
+  }
+
+  to {
+    transform: translateX(0);
+  }
+}
+
+@utility marquee-left {
+  animation: marquee-left 52s linear infinite;
+}
+
+@utility marquee-right {
+  animation: marquee-right 52s linear infinite;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--umber-canvas);
+  color: var(--umber-ink);
+  font-family: var(--font-sans), system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background: color-mix(in srgb, var(--umber-accent) 25%, transparent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
