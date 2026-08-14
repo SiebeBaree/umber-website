@@ -1,5 +1,12 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono, Instrument_Serif } from "next/font/google";
+import {
+  GITHUB_URL,
+  SITE_DESCRIPTION,
+  SITE_NAME,
+  SITE_TITLE,
+  SITE_URL,
+} from "../lib/site";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -20,9 +27,54 @@ const instrumentSerif = Instrument_Serif({
 });
 
 export const metadata: Metadata = {
-  title: "Umber, the open source AI image and video studio",
-  description:
-    "Generate images and videos with the best AI models, using your own API keys. Free, open source and yours to keep. No subscription, no markup, no lock-in.",
+  metadataBase: new URL(SITE_URL),
+  title: SITE_TITLE,
+  description: SITE_DESCRIPTION,
+  applicationName: SITE_NAME,
+  keywords: [
+    "AI image generator",
+    "AI video generator",
+    "open source AI image generator",
+    "free AI image generator",
+    "AI image generator with your own API key",
+    "bring your own API key",
+    "text to image",
+    "text to video",
+    "AI studio desktop app",
+    "no subscription AI",
+  ],
+  authors: [{ name: "Siebe Baree", url: GITHUB_URL }],
+  creator: "Siebe Baree",
+  category: "technology",
+  alternates: { canonical: "/" },
+  openGraph: {
+    type: "website",
+    url: "/",
+    siteName: SITE_NAME,
+    title: SITE_TITLE,
+    description: SITE_DESCRIPTION,
+    locale: "en_US",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: SITE_TITLE,
+    description: SITE_DESCRIPTION,
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+      "max-video-preview": -1,
+    },
+  },
+};
+
+export const viewport: Viewport = {
+  themeColor: "#cbdaf2",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

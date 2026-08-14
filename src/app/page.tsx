@@ -1,4 +1,11 @@
 import Image from "next/image";
+import {
+  GITHUB_URL,
+  LICENSE_URL,
+  SITE_DESCRIPTION,
+  SITE_NAME,
+  SITE_URL,
+} from "../lib/site";
 import { AI_IMAGES } from "./_components/ai-images";
 import { CanvasBackdrop } from "./_components/canvas-backdrop";
 import { DownloadButton } from "./_components/download-button";
@@ -8,6 +15,67 @@ import { Nav } from "./_components/nav";
 
 const IMG_W = 2736;
 const IMG_H = 1536;
+
+// One list feeds both the FAQ section and its structured data, so what
+// Google reads always matches what the page shows.
+const FAQ_ITEMS = [
+  {
+    q: "Is Umber really free?",
+    a: "Yes. Umber is open source under the MIT license. The only costs are the API fees you pay the labs directly for what you generate. Umber adds no markup and takes no cut.",
+  },
+  {
+    q: "Which providers can I connect?",
+    a: "Google, OpenAI, Black Forest Labs, ByteDance, Kuaishou (Kling), Alibaba, Runway, Ideogram and Recraft.",
+  },
+  {
+    q: "Can Umber see my keys, prompts or images?",
+    a: "No. Keys are encrypted into your OS keychain and requests go straight from your computer to the provider. Your gallery lives on your device. There is no Umber server or account in the middle.",
+  },
+  {
+    q: "Do I need keys for all nine providers?",
+    a: "One is enough. The model picker shows what each key unlocks and walks you through adding more whenever you want them.",
+  },
+  {
+    q: "What platforms does it run on?",
+    a: "macOS, Windows and Linux, as a native desktop app.",
+  },
+];
+
+const JSON_LD = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": `${SITE_URL}/#website`,
+      url: SITE_URL,
+      name: SITE_NAME,
+      description: SITE_DESCRIPTION,
+    },
+    {
+      "@type": "SoftwareApplication",
+      "@id": `${SITE_URL}/#app`,
+      name: SITE_NAME,
+      url: SITE_URL,
+      description: SITE_DESCRIPTION,
+      applicationCategory: "MultimediaApplication",
+      operatingSystem: "macOS, Windows, Linux",
+      offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
+      isAccessibleForFree: true,
+      license: LICENSE_URL,
+      sameAs: [GITHUB_URL],
+      author: { "@type": "Person", name: "Siebe Baree", url: GITHUB_URL },
+    },
+    {
+      "@type": "FAQPage",
+      "@id": `${SITE_URL}/#faq`,
+      mainEntity: FAQ_ITEMS.map((item) => ({
+        "@type": "Question",
+        name: item.q,
+        acceptedAnswer: { "@type": "Answer", text: item.a },
+      })),
+    },
+  ],
+};
 
 function SectionHeading({
   title,
@@ -33,6 +101,13 @@ function SectionHeading({
 export default function Home() {
   return (
     <div id="top" className="flex flex-1 flex-col overflow-x-clip">
+      <script
+        type="application/ld+json"
+        // biome-ignore lint/security/noDangerouslySetInnerHtml: static JSON-LD built from constants
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(JSON_LD).replace(/</g, "\\u003c"),
+        }}
+      />
       <CanvasBackdrop />
 
       <main className="flex-1">
@@ -311,28 +386,7 @@ export default function Home() {
           <div className="mx-auto max-w-3xl px-6">
             <SectionHeading title="Fair questions" />
             <div className="mt-12 border-t border-ink/15">
-              {[
-                {
-                  q: "Is Umber really free?",
-                  a: "Yes. Umber is open source under the MIT license. The only costs are the API fees you pay the labs directly for what you generate. Umber adds no markup and takes no cut.",
-                },
-                {
-                  q: "Which providers can I connect?",
-                  a: "Google, OpenAI, Black Forest Labs, ByteDance, Kuaishou (Kling), Alibaba, Runway, Ideogram and Recraft.",
-                },
-                {
-                  q: "Can Umber see my keys, prompts or images?",
-                  a: "No. Keys are encrypted into your OS keychain and requests go straight from your computer to the provider. Your gallery lives on your device. There is no Umber server or account in the middle.",
-                },
-                {
-                  q: "Do I need keys for all nine providers?",
-                  a: "One is enough. The model picker shows what each key unlocks and walks you through adding more whenever you want them.",
-                },
-                {
-                  q: "What platforms does it run on?",
-                  a: "macOS, Windows and Linux, as a native desktop app.",
-                },
-              ].map((item) => (
+              {FAQ_ITEMS.map((item) => (
                 <details
                   key={item.q}
                   className="group border-b border-ink/15 py-5"
