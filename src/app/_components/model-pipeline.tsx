@@ -339,10 +339,12 @@ export function ModelPipeline() {
             </div>
             {/* The loading arc, orbiting just outside the glass. It never
                 stops turning — only its opacity comes and goes — so it can
-                fade out mid-spin instead of snapping back to its start. */}
+                fade out mid-spin instead of snapping back to its start. The
+                size is explicit because WebKit does not stretch a replaced
+                element to its insets the way Blink does. */}
             <svg
               aria-hidden="true"
-              className={`spinner-turn absolute -inset-[13%] transition-opacity duration-700 ${
+              className={`spinner-turn absolute -top-[13%] -left-[13%] h-[126%] w-[126%] transition-opacity duration-700 ${
                 loading ? "opacity-100" : "opacity-0"
               }`}
               viewBox="0 0 100 100"
