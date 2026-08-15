@@ -23,7 +23,7 @@ Key facts:
 
 - Price: free. Open source under the MIT license. The only money spent goes
   to the AI labs, at their list price per generation. Umber adds no markup.
-- Models: 19 image and 11 video models (30 total) from 9 labs: ${PROVIDERS.join(
+- Models: the newest image and video models from ${PROVIDERS.join(
   ", ",
 )}. One API key is enough to start.
 - Cost preview: the exact price of every generation is shown before it runs,
@@ -49,7 +49,7 @@ Key facts:
 - Can Umber see my keys, prompts or images? No. Keys live in your OS
   keychain, requests go straight to the provider and the gallery stays on
   your device.
-- Do I need keys for all nine providers? No, one is enough. The model picker
+- Do I need a key for every provider? No, one is enough. The model picker
   shows what each key unlocks.
 `;
 

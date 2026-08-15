@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { AI_IMAGES } from "./ai-images";
+import { AI_IMAGES_SMALL } from "./ai-images";
 import { type ProviderId, ProviderMark } from "./provider-mark";
 
 /*
@@ -28,14 +28,14 @@ interface Provider {
 // Ordered left to right along the arc.
 const ARC: readonly Provider[] = [
   { id: "recraft", name: "Recraft", flagship: "Recraft V4.1" },
-  { id: "alibaba", name: "Alibaba", flagship: "Qwen Image" },
-  { id: "bytedance", name: "ByteDance", flagship: "Seedream 4.5" },
+  { id: "alibaba", name: "Alibaba", flagship: "Qwen Image 3.0 Pro" },
+  { id: "bytedance", name: "ByteDance", flagship: "Seedream 5.0 Pro" },
   { id: "google", name: "Google", flagship: "Nano Banana 2" },
   { id: "openai", name: "OpenAI", flagship: "GPT Image 2" },
   {
     id: "blackForestLabs",
     name: "Black Forest Labs",
-    flagship: "FLUX.2 [pro]",
+    flagship: "FLUX.2 [max]",
   },
   { id: "kuaishou", name: "Kuaishou", flagship: "Kling Image 2.1" },
   { id: "runway", name: "Runway", flagship: "Gen-4 Image" },
@@ -43,46 +43,61 @@ const ARC: readonly Provider[] = [
 ];
 
 // Every model in the app, image and video shuffled together into two lanes
-// of equal length so the strips move at the same pace.
+// of near-equal length so the strips move at almost the same pace.
 const LANE_A: readonly [string, ProviderId][] = [
   ["Nano Banana 2", "google"],
   ["Sora 2 Pro", "openai"],
+  ["FLUX.2 [max]", "blackForestLabs"],
+  ["Kling 3.0", "kuaishou"],
+  ["Seedream 5.0 Pro", "bytedance"],
+  ["Grok Imagine Image 2.0", "xai"],
+  ["Veo 3.1", "google"],
+  ["GPT Image 1.5", "openai"],
+  ["Seedance 2.5", "bytedance"],
+  ["Qwen Image 3.0 Pro", "alibaba"],
+  ["Gen-4.5", "runway"],
+  ["Hailuo 3", "minimax"],
   ["FLUX.2 [pro]", "blackForestLabs"],
   ["Kling 2.6", "kuaishou"],
-  ["GPT Image 1.5", "openai"],
-  ["Seedance 2.0", "bytedance"],
-  ["Qwen Image", "alibaba"],
-  ["Veo 3.1", "google"],
-  ["Recraft V4.1", "recraft"],
-  ["Gen-4.5", "runway"],
   ["Nano Banana", "google"],
   ["GPT Image 1", "openai"],
   ["Wan 2.6", "alibaba"],
   ["Ideogram V3", "ideogram"],
+  ["Seedream 4.0", "bytedance"],
+  ["Reve 2.1", "reve"],
+  ["Recraft V4.1", "recraft"],
   ["Kling Image 2.1", "kuaishou"],
+  ["Sora 2", "openai"],
 ];
 
 const LANE_B: readonly [string, ProviderId][] = [
   ["Veo 3.1 Fast", "google"],
   ["GPT Image 2", "openai"],
   ["Seedream 4.5", "bytedance"],
-  ["Sora 2", "openai"],
+  ["FLUX.3 Video", "blackForestLabs"],
   ["Ideogram 4.0", "ideogram"],
   ["Kling 2.5 Turbo", "kuaishou"],
+  ["Grok Imagine Video 1.5", "xai"],
   ["Gen-4 Image", "runway"],
+  ["Nano Banana 2 Lite", "google"],
   ["Seedance 1.0 Pro", "bytedance"],
+  ["Wan 2.7", "alibaba"],
   ["FLUX.1 Kontext [pro]", "blackForestLabs"],
   ["Nano Banana Pro", "google"],
   ["Gen-4 Turbo", "runway"],
+  ["Seedream 5.0 Lite", "bytedance"],
   ["Recraft V3", "recraft"],
+  ["Gemini Omni Flash", "google"],
   ["GPT Image 1 Mini", "openai"],
-  ["Seedream 4.0", "bytedance"],
+  ["Seedance 2.0", "bytedance"],
+  ["FLUX.2 [flex]", "blackForestLabs"],
+  ["Qwen Image", "alibaba"],
   ["FLUX 1.1 [pro]", "blackForestLabs"],
 ];
 
 // One real generation per cycle, drawn round-robin from the shared pool.
 function artSrc(i: number) {
-  return AI_IMAGES[i % AI_IMAGES.length];
+  return AI_IMAGES_SMALL[i % AI_IMAGES_SMALL.length];
 }
 
 /* ------------------------------------------------------------- Geometry */

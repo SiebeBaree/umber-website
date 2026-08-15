@@ -25,3 +25,15 @@ export const AI_IMAGES = [
   "/ai-images/umber-fd680b1e.webp",
   "/ai-images/umber-ff74827b.webp",
 ] as const;
+
+/*
+ * The same pool at 1368x768, for the animated surfaces (the hero conveyor
+ * and the constellation's output frame) that paint images as raw CSS
+ * backgrounds. The full-size files decode to ~17MB of texture each, which
+ * overwhelms older phones; these decode to a quarter of that and are
+ * indistinguishable on cards that are moving, rotated or under 700px wide.
+ * Generated from the originals with sharp (resize 1368, webp quality 78).
+ */
+export const AI_IMAGES_SMALL = AI_IMAGES.map((src) =>
+  src.replace("/ai-images/", "/ai-images/1368/"),
+) as readonly string[];

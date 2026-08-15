@@ -7,6 +7,7 @@ import {
   SITE_TITLE,
   SITE_URL,
 } from "../lib/site";
+import { PerfGuard } from "./_components/perf-guard";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -83,7 +84,10 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} ${instrumentSerif.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col">
+        <PerfGuard />
+        {children}
+      </body>
     </html>
   );
 }

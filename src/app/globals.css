@@ -172,6 +172,32 @@
   }
 }
 
+/*
+ * A backdrop blob as a pre-computed glow: the radial gradient reproduces the
+ * app's solid-circle-behind-gaussian-blur look without paying for the blur
+ * on every composited frame. The gradient lives on a pseudo-element scaled
+ * past the box (a blur bleeds outside its element too); the element itself
+ * stays free for the drift animation's transform.
+ */
+@utility canvas-glow {
+  --glow-o: 0.8;
+
+  &::before {
+    content: "";
+    position: absolute;
+    inset: -32%;
+    border-radius: 9999px;
+    background: radial-gradient(
+      circle closest-side,
+      rgb(255 255 255 / var(--glow-o)) 0%,
+      rgb(255 255 255 / calc(var(--glow-o) * 0.82)) 32%,
+      rgb(255 255 255 / calc(var(--glow-o) * 0.45)) 58%,
+      rgb(255 255 255 / calc(var(--glow-o) * 0.14)) 79%,
+      transparent 100%
+    );
+  }
+}
+
 @utility drift-a {
   animation: umber-drift-a 47s ease-in-out infinite;
 }
@@ -379,4 +405,65 @@ body {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
+}
+
+/*
+ * --- The lite tier -----------------------------------------------------
+ *
+ * PerfGuard measures the real frame rate shortly after load and adds
+ * `perf-lite` to <html> on devices that cannot hold it. The choreography
+ * all stays; what goes is the per-frame GPU work that old phones choke on:
+ * backdrop-filter (every glass surface re-filters its backdrop each frame
+ * while anything moves behind it) and the blur() animations. Glass falls
+ * back to a more opaque solid that reads the same against the canvas.
+ */
+.perf-lite .glass,
+.perf-lite .glass-raised,
+.perf-lite .glass-control {
+  backdrop-filter: none;
+  background-color: rgb(255 255 255 / 0.84);
+}
+
+.perf-lite .backdrop-blur-xl {
+  backdrop-filter: none;
+  background-color: rgb(255 255 255 / 0.8);
+}
+
+/* The idle sways are pure garnish; parking them frees whole layers. */
+.perf-lite .drift-a,
+.perf-lite .drift-b,
+.perf-lite .drift-c,
+.perf-lite .node-bob {
+  animation: none;
+}
+
+/* The develop/dissolve keeps its timing but drops the animated blur. */
+@keyframes art-reveal-lite {
+  0% {
+    opacity: 0;
+    transform: scale(1.06);
+  }
+
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes art-dissolve-lite {
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+  }
+}
+
+.perf-lite .art-reveal {
+  animation-name: art-reveal-lite;
+}
+
+.perf-lite .art-dissolve {
+  animation-name: art-dissolve-lite;
 }

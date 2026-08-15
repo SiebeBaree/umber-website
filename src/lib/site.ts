@@ -11,7 +11,7 @@ export const SITE_NAME = "Umber";
 export const SITE_TITLE = "Umber | Free Open Source AI Image & Video Generator";
 
 export const SITE_DESCRIPTION =
-  "Generate AI images and videos with your own API keys. 30 models from 9 labs, no subscription, no markup. Free and open source on macOS, Windows and Linux.";
+  "Generate AI images and videos with your own API keys. The newest models from every major lab, no subscription, no markup. Free and open source on macOS, Windows and Linux.";
 
 export const SLOGAN = "The best AI models. One free studio.";
 
@@ -28,4 +28,7 @@ export const PROVIDERS = [
   "Runway",
   "Ideogram",
   "Recraft",
+  "xAI",
+  "Reve",
+  "MiniMax (Hailuo)",
 ];

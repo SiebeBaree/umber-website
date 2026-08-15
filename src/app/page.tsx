@@ -9,6 +9,7 @@ import {
 import { AI_IMAGES } from "./_components/ai-images";
 import { CanvasBackdrop } from "./_components/canvas-backdrop";
 import { DownloadButton } from "./_components/download-button";
+import { FaqItem } from "./_components/faq-item";
 import { HeroFlow } from "./_components/hero-flow";
 import { ModelPipeline } from "./_components/model-pipeline";
 import { Nav } from "./_components/nav";
@@ -25,14 +26,14 @@ const FAQ_ITEMS = [
   },
   {
     q: "Which providers can I connect?",
-    a: "Google, OpenAI, Black Forest Labs, ByteDance, Kuaishou (Kling), Alibaba, Runway, Ideogram and Recraft.",
+    a: "Google, OpenAI, Black Forest Labs, ByteDance, Kuaishou (Kling), Alibaba, Runway, Ideogram, Recraft, xAI, Reve and MiniMax (Hailuo).",
   },
   {
     q: "Can Umber see my keys, prompts or images?",
     a: "No. Keys are encrypted into your OS keychain and requests go straight from your computer to the provider. Your gallery lives on your device. There is no Umber server or account in the middle.",
   },
   {
-    q: "Do I need keys for all nine providers?",
+    q: "Do I need a key for every provider?",
     a: "One is enough. The model picker shows what each key unlocks and walks you through adding more whenever you want them.",
   },
   {
@@ -121,10 +122,10 @@ export default function Home() {
               <em className="text-accent">No one in between.</em>
             </h2>
             <p className="mx-auto mt-7 max-w-2xl text-lg leading-relaxed text-pretty text-muted">
-              Umber talks to Google, OpenAI, Black Forest Labs and six more labs
-              directly, with API keys you own. No subscription, no markup, no
-              account. An image costs the few cents the lab charges and
-              everything you make stays on your machine.
+              Umber talks to Google, OpenAI, Black Forest Labs and every other
+              major lab directly, with API keys you own. No subscription, no
+              markup, no account. An image costs the few cents the lab charges
+              and everything you make stays on your machine.
             </p>
           </div>
         </section>
@@ -134,7 +135,7 @@ export default function Home() {
           <div className="mx-auto max-w-6xl px-6">
             <SectionHeading
               title="Pick a model the way you pick a brush"
-              lede="19 image and 11 video models from 9 labs, side by side. One key is enough to start."
+              lede="The newest image and video models from every major lab, side by side. One key is enough to start."
             />
             <div className="mt-12">
               <ModelPipeline />
@@ -353,7 +354,7 @@ export default function Home() {
                 <ul className="mt-6 space-y-3 text-[15px] text-ink/80">
                   {[
                     "Images from a few cents, billed by the provider at cost",
-                    "30 models across 9 labs, side by side",
+                    "The newest models from every major lab, side by side",
                     "Your gallery and keys never leave your device",
                     "MIT licensed, yours forever",
                   ].map((item) => (
@@ -387,30 +388,7 @@ export default function Home() {
             <SectionHeading title="Fair questions" />
             <div className="mt-12 border-t border-ink/15">
               {FAQ_ITEMS.map((item) => (
-                <details
-                  key={item.q}
-                  className="group border-b border-ink/15 py-5"
-                >
-                  <summary className="flex cursor-pointer list-none items-center justify-between gap-4 font-medium tracking-tight [&::-webkit-details-marker]:hidden">
-                    {item.q}
-                    <svg
-                      viewBox="0 0 16 16"
-                      className="size-4 shrink-0 text-muted transition-transform group-open:rotate-45"
-                      fill="none"
-                      aria-hidden="true"
-                    >
-                      <path
-                        d="M8 3v10M3 8h10"
-                        stroke="currentColor"
-                        strokeWidth="1.5"
-                        strokeLinecap="round"
-                      />
-                    </svg>
-                  </summary>
-                  <p className="mt-3 max-w-2xl text-[15px] leading-relaxed text-muted">
-                    {item.a}
-                  </p>
-                </details>
+                <FaqItem a={item.a} key={item.q} q={item.q} />
               ))}
             </div>
           </div>

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { AI_IMAGES } from "./ai-images";
+import { AI_IMAGES_SMALL } from "./ai-images";
 import { DownloadButton } from "./download-button";
 
 /*
@@ -45,7 +45,7 @@ const TINTS = [
   "#5f7f6a",
   "#b06f5f",
 ];
-const CARDS = AI_IMAGES.map((src, i) => ({ src, tint: TINTS[i] }));
+const CARDS = AI_IMAGES_SMALL.map((src, i) => ({ src, tint: TINTS[i] }));
 const LEFT_CARDS = CARDS.slice(0, 10);
 const RIGHT_CARDS = CARDS.slice(10);
 const SEQUENCES = {
@@ -230,6 +230,18 @@ export function HeroFlow({ nav }: { nav: React.ReactNode }) {
       document.body.style.overflow = "";
     };
   }, [ready]);
+
+  // Animation time falls behind the wall clock when frames are slow (each
+  // frame advances at most 0.1s), so on a struggling device the intro alone
+  // cannot be trusted to reveal the page. This deadline can: the UI fades
+  // in and scrolling unlocks no matter how the animation is doing.
+  useEffect(() => {
+    const deadline = window.setTimeout(
+      () => setReady(true),
+      (INTRO_SECONDS + 1) * 1000,
+    );
+    return () => clearTimeout(deadline);
+  }, []);
 
   return (
     <section className="relative h-svh overflow-hidden">
