@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { getLatestRelease, type Release } from "../lib/release";
 import {
   GITHUB_URL,
   LICENSE_URL,
@@ -13,6 +14,7 @@ import { FaqItem } from "./_components/faq-item";
 import { HeroFlow } from "./_components/hero-flow";
 import { ModelPipeline } from "./_components/model-pipeline";
 import { Nav } from "./_components/nav";
+import { ReleaseLine } from "./_components/release-line";
 
 const IMG_W = 2736;
 const IMG_H = 1536;
@@ -42,7 +44,7 @@ const FAQ_ITEMS = [
   },
 ];
 
-const JSON_LD = {
+const jsonLd = (release: Release | null) => ({
   "@context": "https://schema.org",
   "@graph": [
     {
@@ -60,6 +62,9 @@ const JSON_LD = {
       description: SITE_DESCRIPTION,
       applicationCategory: "MultimediaApplication",
       operatingSystem: "macOS, Windows, Linux",
+      // Only claimed when a real release backs it up.
+      ...(release ? { softwareVersion: release.version } : {}),
+      downloadUrl: `${SITE_URL}/download`,
       offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
       isAccessibleForFree: true,
       license: LICENSE_URL,
@@ -76,7 +81,7 @@ const JSON_LD = {
       })),
     },
   ],
-};
+});
 
 function SectionHeading({
   title,
@@ -99,20 +104,25 @@ function SectionHeading({
   );
 }
 
-export default function Home() {
+export default async function Home() {
+  const release = await getLatestRelease();
+
   return (
     <div id="top" className="flex flex-1 flex-col overflow-x-clip">
       <script
         type="application/ld+json"
         // biome-ignore lint/security/noDangerouslySetInnerHtml: static JSON-LD built from constants
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify(JSON_LD).replace(/</g, "\\u003c"),
+          __html: JSON.stringify(jsonLd(release)).replace(/</g, "\\u003c"),
         }}
       />
       <CanvasBackdrop />
 
       <main className="flex-1">
-        <HeroFlow nav={<Nav />} />
+        <HeroFlow
+          nav={<Nav />}
+          releaseLine={<ReleaseLine release={release} />}
+        />
 
         {/* ---------------------------------------------------- Manifesto */}
         <section id="features" className="relative scroll-mt-24 py-28">
@@ -171,30 +181,14 @@ export default function Home() {
                 ))}
               </ul>
             </div>
-            <div className="relative mx-auto aspect-[5/4] w-full max-w-xl">
+            <div className="mx-auto w-full max-w-xl">
               <Image
-                src={AI_IMAGES[3]}
-                alt=""
-                width={IMG_W}
-                height={IMG_H}
-                sizes="(min-width: 1024px) 22rem, 60vw"
-                className="absolute top-0 right-0 w-[62%] rotate-[2.5deg] rounded-2xl shadow-[0_24px_48px_-20px_rgb(28_41_90/0.5)]"
-              />
-              <Image
-                src={AI_IMAGES[8]}
-                alt=""
-                width={IMG_W}
-                height={IMG_H}
-                sizes="(min-width: 1024px) 21rem, 56vw"
-                className="absolute top-[27%] left-0 w-[58%] -rotate-3 rounded-2xl shadow-[0_24px_48px_-20px_rgb(28_41_90/0.5)]"
-              />
-              <Image
-                src={AI_IMAGES[13]}
-                alt=""
-                width={IMG_W}
-                height={IMG_H}
-                sizes="(min-width: 1024px) 20rem, 52vw"
-                className="absolute right-[6%] bottom-0 w-[55%] rotate-[1.5deg] rounded-2xl shadow-[0_24px_48px_-20px_rgb(28_41_90/0.5)]"
+                alt="The Umber composer: a prompt reading “A cinematic photo of a neon-lit street after rain”, the Grok Imagine Image 2.0 model, 1:1 at 1K, and the price — $0.04 — shown before the generation is sent."
+                className="w-full"
+                height={862}
+                sizes="(min-width: 1024px) 36rem, 90vw"
+                src="/app/create.webp"
+                width={1182}
               />
             </div>
           </div>
@@ -292,6 +286,16 @@ export default function Home() {
                   </p>
                 </div>
               ))}
+            </div>
+            <div className="mx-auto mt-16 max-w-3xl">
+              <Image
+                alt="Umber's setup screen: logos for Google, OpenAI, Black Forest Labs and other providers ringing the Umber mark, above the heading “Bring your own keys” and a Connect a provider button."
+                className="w-full"
+                height={842}
+                sizes="(min-width: 1024px) 48rem, 92vw"
+                src="/app/byok.webp"
+                width={1162}
+              />
             </div>
           </div>
         </section>

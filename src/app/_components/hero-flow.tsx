@@ -80,7 +80,13 @@ function easeInOutQuad(t: number) {
 type Card = { el: HTMLDivElement; p: number };
 type Side = { host: HTMLDivElement; cards: Card[]; spawned: number };
 
-export function HeroFlow({ nav }: { nav: React.ReactNode }) {
+export function HeroFlow({
+  nav,
+  releaseLine,
+}: {
+  nav: React.ReactNode;
+  releaseLine: React.ReactNode;
+}) {
   const leftRef = useRef<HTMLDivElement>(null);
   const rightRef = useRef<HTMLDivElement>(null);
   const [ready, setReady] = useState(false);
@@ -307,7 +313,7 @@ export function HeroFlow({ nav }: { nav: React.ReactNode }) {
               Star on GitHub
             </a>
           </div>
-          <p className="text-[13px] text-muted">macOS · Windows · Linux</p>
+          {releaseLine}
         </div>
       </div>
 

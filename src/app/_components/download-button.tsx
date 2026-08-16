@@ -1,5 +1,8 @@
-"use client";
-
+/*
+ * Points at `/download`, which resolves the newest installer for the
+ * visitor's platform and redirects to it. A plain link on purpose: no
+ * JavaScript, no version baked into the markup.
+ */
 export function DownloadButton({
   size = "md",
   children = "Download for free",
@@ -8,9 +11,8 @@ export function DownloadButton({
   children?: React.ReactNode;
 }) {
   return (
-    <button
-      type="button"
-      onClick={() => alert("Umber is coming soon. Stay tuned!")}
+    <a
+      href="/download"
       className={`group inline-flex items-center justify-center gap-2 rounded-full bg-accent font-medium text-accent-ink shadow-[0_8px_24px_-10px_var(--umber-accent)] transition-all hover:bg-accent-strong active:scale-[0.98] ${
         size === "lg" ? "h-13 px-8 text-base" : "h-10 px-5 text-sm"
       }`}
@@ -30,6 +32,6 @@ export function DownloadButton({
           strokeLinejoin="round"
         />
       </svg>
-    </button>
+    </a>
   );
 }

@@ -39,6 +39,8 @@ Key facts:
 ## Links
 
 - [Website](${SITE_URL}): overview, model catalog and download
+- [Download](${SITE_URL}/download): redirects to the newest installer for the
+  visitor's platform. Add \`?os=mac\`, \`?os=windows\` or \`?os=linux\` to pick one.
 - [GitHub repository](${GITHUB_URL}): source code, issues and releases
 - [MIT License](${LICENSE_URL})
 
